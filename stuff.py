@@ -1,23 +1,4 @@
-import os
-import subprocess
-import sys
+import asyncio
 
-p = subprocess.Popen(
-    [os.path.join(os.path.dirname(sys.executable), "<stdin>"), "-m", "asyncio"],
-    executable=sys.executable,
-    text=True,
-    stdin=subprocess.PIPE,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.STDOUT,
-)
-p.stdin.write("exit")
-p.stdin.close()
-data = p.stdout.read()
-p.stdout.close()
-# try to cleanup the child so we don't appear to leak when running
-# with regrtest -R.
-p.wait()
-subprocess._cleanup()
-if "unclosed event loop" in data:
-    print(data, file=sys.stderr)
-    raise SystemExit(1)
+asyncio.set_event_loop(loop := asyncio.new_event_loop())
+loop.run_until_complete(asyncio.sleep(1))
