@@ -6,9 +6,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# defaults:
-#   run:
-#     shell: bash
+defaults:
+  run:
+    shell: bash
 
 jobs:
   run-stuff:
@@ -44,4 +44,5 @@ jobs:
 
     - name: Run stuff
       run: |
+        set -euxo pipefail
         uv run stuff.py
